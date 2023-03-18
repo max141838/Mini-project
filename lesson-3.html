@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  body {
+    background-image: url("south.webp");
+  }
+  div{
+    float: left;
+    line-height: 120px;
+    font-size: 40px;
+    background: dodgerblue;
+    color: white;
+    margin-top: 60px;
+    width: 700px;
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  button {
+    background-color: #FF4500;
+    border: none;
+    color: white;
+    padding: 20px 34px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+
+
+
+</style>
+<body>
+<div id="userInfo"></div>
+<button id="btn">click here</button>
+
+<div id="posts"></div>
+<script>
+let url = new URL(location.href)
+let textUser = url.searchParams.get('data');
+let user = JSON.parse(textUser);
+let div = document.querySelector("#userInfo");
+div.innerHTML =`
+    <div>
+      name ${user.name}
+    </div>
+    <div>
+      username ${user.username}
+    </div>
+    <div>
+    email ${user.email}
+</div>
+`
+let button = document.querySelector('#btn');
+button.onclick=()=>{
+  fetch(`https://jsonplaceholder.typicode.com/users/${user.id}/posts`)
+    .then(value => value.json())
+    .then(posts => {
+      let postdiv = document.querySelector("#posts");
+      for (const post of posts) {
+        let div = document.createElement('div');
+        div.innerText = `${post.id} ${post.title}`
+        postdiv.append(div)
+        let button = document.createElement('button');
+
+        button.innerText = 'click'
+        button.onclick=()=>{
+          location.href='lesson-4.html?info='+JSON.stringify(post);
+        }
+        div.append(button)
+      }
+    })
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
